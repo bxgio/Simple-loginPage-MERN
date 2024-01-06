@@ -26,7 +26,7 @@ db.connect((err) => {
   }
 });
 
-// Routes
+// Login Route
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
@@ -43,6 +43,19 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// Registration Route
+// Registration Route
+app.post('/api/register', (req, res) => {
+  const { username, password, email, name } = req.body;
+  const query = 'INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)';
+
+  db.query(query, [username, password, email, name], (err, results) => {
+    if (err) {
+      console.error('MySQL query error:', err);
+      res.json({ success: false, message: 'Error during registration' });
+    } else {
+      console.log('User registered successfully');
+      res.json({ success: true, message: 'Registration successful' });
+    }
+  });
 });
